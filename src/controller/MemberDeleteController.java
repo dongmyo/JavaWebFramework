@@ -2,9 +2,10 @@ package controller;
 
 import java.util.Map;
 
+import binder.DataBinding;
 import dao.MemberDao;
 
-public class MemberDeleteController implements Controller {
+public class MemberDeleteController implements Controller, DataBinding {
 	MemberDao memberDao;
 	
 	
@@ -22,4 +23,11 @@ public class MemberDeleteController implements Controller {
 		return "redirect:list.do";
 	}
 
+	@Override
+	public Object[] getDataBinders() {
+		return new Object[] {
+				"no", Integer.class
+		};
+	}
+	
 }

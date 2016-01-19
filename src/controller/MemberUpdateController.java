@@ -2,10 +2,11 @@ package controller;
 
 import java.util.Map;
 
+import binder.DataBinding;
 import dao.MemberDao;
 import vo.Member;
 
-public class MemberUpdateController implements Controller {
+public class MemberUpdateController implements Controller, DataBinding {
 	MemberDao memberDao;
 	
 	
@@ -17,21 +18,31 @@ public class MemberUpdateController implements Controller {
 	
 	@Override
 	public String execute(Map<String, Object> model) throws Exception {
-		if(model.get("member") == null) {
+		Member member = (Member) model.get("member");
+		
+		if(member.getEmail() == null) {
 			Integer no = (Integer) model.get("no");
 			
-			Member member = memberDao.selectOne(no);
+			Member detailInfo = memberDao.selectOne(no);
 
-			model.put("member", member);
+			model.put("member", detailInfo);
 
 			return "/member/MemberUpdateForm.jsp";
 		}
 		else {
-			Member member = (Member) model.get("member");
+			
 			memberDao.update(member);
 			
 			return "redirect:list.do";
 		}
 	}
 
+	@Override
+	public Object[] getDataBinders() {
+		return new Object[] {
+				"no", Integer.class,
+				"member", Member.class
+		};
+	}
+	
 }
