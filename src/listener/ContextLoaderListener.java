@@ -31,14 +31,12 @@ public class ContextLoaderListener implements ServletContextListener {
 			
 			memberDao.createTable();
 
+			sc.setAttribute("/auth/login.do", new LogInController().setMemberDao(memberDao));
+			sc.setAttribute("/auth/logout.do", new LogOutController());
 			sc.setAttribute("/member/list.do", new MemberListController().setMemberDao(memberDao));
-			
-			// TODO
-//			sc.setAttribute("/auth/login.do", new LogInController().setMemberDao(memberDao));
-//			sc.setAttribute("/auth/logout.do", new LogOutController());
-//			sc.setAttribute("/member/add.do", new MemberAddController().setMemberDao(memberDao));
-//			sc.setAttribute("/member/update.do", new MemberUpdateController().setMemberDao(memberDao));
-//			sc.setAttribute("/member/delete.do", new MemberDeleteController().setMemberDao(memberDao));			
+			sc.setAttribute("/member/add.do", new MemberAddController().setMemberDao(memberDao));
+			sc.setAttribute("/member/update.do", new MemberUpdateController().setMemberDao(memberDao));
+			sc.setAttribute("/member/delete.do", new MemberDeleteController().setMemberDao(memberDao));			
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
