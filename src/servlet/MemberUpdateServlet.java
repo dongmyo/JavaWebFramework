@@ -52,7 +52,7 @@ public class MemberUpdateServlet extends HttpServlet {
 					.setEmail(request.getParameter("email"))
 			);
 
-			response.sendRedirect("list");			
+			response.sendRedirect("list.do");			
 		}
 		catch(Exception e) {
 			e.printStackTrace();

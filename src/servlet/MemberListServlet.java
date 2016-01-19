@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,17 +23,23 @@ public class MemberListServlet extends HttpServlet {
 
 			request.setAttribute("members", memberDao.selectList());
 
-			response.setContentType("text/html; charset=UTF-8");
-			
-			RequestDispatcher rd = request.getRequestDispatcher("/member/MemberList.jsp");
-			rd.include(request, response);
+			// 프론트 컨트롤러에서 공통 처리하므로 페이지 컨트롤러에서는 제거 처리
+//			response.setContentType("text/html; charset=UTF-8");
+//			
+//			RequestDispatcher rd = request.getRequestDispatcher("/member/MemberList.jsp");
+//			rd.include(request, response);
+
+			// 뷰 페이지 정보를 프론트 컨트롤러에 전달하기 위해
+			request.setAttribute("viewUrl", "/member/MemberList.jsp");
 		}
 		catch(Exception e) {
-			e.printStackTrace();
-			request.setAttribute("error", e);
-
-			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
-			rd.forward(request, response);			
+			// 프론트 컨트롤러에서 공통 처리하므로 페이지 컨트롤러에서는 제거 처리
+			throw new ServletException(e);
+//			e.printStackTrace();
+//			request.setAttribute("error", e);
+//
+//			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+//			rd.forward(request, response);			
 		}
 	}
 
