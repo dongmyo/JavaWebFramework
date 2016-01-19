@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import binder.DataBinding;
+import binder.ServletRequestDataBinder;
 import controller.Controller;
 import controller.*;
 import vo.Member;
@@ -35,45 +37,8 @@ public class DispatcherServlet extends HttpServlet {
 		    
 			Controller pageController = (Controller) sc.getAttribute(servletPath);
 			
-			/* 분기 처리 */
-			// 회원 등록
-			if ("/member/add.do".equals(servletPath)) {
-				if(request.getParameter("email") != null) {
-					Member member = new Member()
-							.setEmail(request.getParameter("email"))
-							.setPassword(request.getParameter("password"))
-							.setName(request.getParameter("name"));
-					
-					model.put("member", member);
-				}
-			}
-			// 회원 수정
-			else if ("/member/update.do".equals(servletPath)) {
-				if (request.getParameter("email") != null) {
-					Member member = new Member()
-							.setNo(Integer.parseInt(request.getParameter("no")))
-							.setEmail(request.getParameter("email"))
-							.setName(request.getParameter("name"));
-					
-					model.put("member", member);
-				}
-				else {
-					model.put("no", new Integer(request.getParameter("no")));
-				}
-			}
-			// 회원 삭제
-			else if ("/member/delete.do".equals(servletPath)) {
-				model.put("no", new Integer(request.getParameter("no")));
-			}
-			// 로그인
-			else if ("/auth/login.do".equals(servletPath)) {
-				if (request.getParameter("email") != null) {
-					Member loginInfo = new Member()
-							.setEmail(request.getParameter("email"))
-							.setPassword(request.getParameter("password"));
-					
-					model.put("loginInfo", loginInfo);
-				}				
+			if(pageController instanceof DataBinding) {
+				prepareRequestData(request, model, (DataBinding) pageController);
 			}
 			
 			/* 페이지 컨트롤러를 실행 */
@@ -102,6 +67,22 @@ public class DispatcherServlet extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
 			rd.forward(request, response);
 		}		
+	}
+
+	private void prepareRequestData(HttpServletRequest request, Map<String, Object> model, DataBinding dataBinding) throws Exception {
+		Object[] dataBinders = dataBinding.getDataBinders();
+		
+		String dataName = null;
+		Class<?> dataType = null;
+		Object dataObj = null;
+		
+	    for(int i = 0; i < dataBinders.length; i += 2) {
+	    	dataName = (String) dataBinders[i];
+	    	dataType = (Class<?>) dataBinders[i + 1];
+	    	
+	    	dataObj = ServletRequestDataBinder.bind(request, dataType, dataName);
+	    	model.put(dataName, dataObj);
+	    } 
 	}
 
 }
