@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controller.Controller;
-import controller.MemberListController;
+import controller.*;
+import vo.Member;
 
 @SuppressWarnings("serial")
 @WebServlet("*.do")
@@ -42,25 +43,55 @@ public class DispatcherServlet extends HttpServlet {
 			}
 			// 회원 등록
 			else if ("/member/add.do".equals(servletPath)) {
-				// TODO
+				pageController = new MemberAddController();
+				  
+				if(request.getParameter("email") != null) {
+					Member member = new Member()
+							.setEmail(request.getParameter("email"))
+							.setPassword(request.getParameter("password"))
+							.setName(request.getParameter("name"));
+					
+					model.put("member", member);
+				}
 			}
 			// 회원 수정
 			else if ("/member/update.do".equals(servletPath)) {
-				// TODO
+				pageController = new MemberUpdateController();
+				
+				if (request.getParameter("email") != null) {
+					Member member = new Member()
+							.setNo(Integer.parseInt(request.getParameter("no")))
+							.setEmail(request.getParameter("email"))
+							.setName(request.getParameter("name"));
+					
+					model.put("member", member);
+				}
+				else {
+					model.put("no", new Integer(request.getParameter("no")));
+				}
 			}
 			// 회원 삭제
 			else if ("/member/delete.do".equals(servletPath)) {
-				// TODO
+				pageController = new MemberDeleteController();
+				model.put("no", new Integer(request.getParameter("no")));
 			}
 			// 로그인
 			else if ("/auth/login.do".equals(servletPath)) {
-				// TODO
+				pageController = new LogInController();
+				
+				if (request.getParameter("email") != null) {
+					Member loginInfo = new Member()
+							.setEmail(request.getParameter("email"))
+							.setPassword(request.getParameter("password"));
+					
+					model.put("loginInfo", loginInfo);
+				}				
 			}
 			// 로그아웃
 			else if ("/auth/logout.do".equals(servletPath)) {
-				// TODO
+				pageController = new LogOutController();
 			}
-			 
+			
 			/* 페이지 컨트롤러를 실행 */
 			String viewUrl = pageController.execute(model);
 		      
