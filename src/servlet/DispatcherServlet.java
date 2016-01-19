@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import binder.DataBinding;
 import binder.ServletRequestDataBinder;
+import context.ApplicationContext;
 import controller.Controller;
-import controller.*;
-import vo.Member;
+import listener.ContextLoaderListener;
 
 @SuppressWarnings("serial")
 @WebServlet("*.do")
@@ -29,13 +29,13 @@ public class DispatcherServlet extends HttpServlet {
 		String servletPath = request.getServletPath();
 		
 		try {
-			ServletContext sc = this.getServletContext();
+			ApplicationContext ctx = ContextLoaderListener.getApplicationContext();
 			
 			// 페이지 컨트롤러에게 전달할 Map 객체 
 			Map<String,Object> model = new HashMap<String, Object>();
 			model.put("session", request.getSession());
 		    
-			Controller pageController = (Controller) sc.getAttribute(servletPath);
+			Controller pageController = (Controller) ctx.getBean(servletPath);
 			
 			if(pageController instanceof DataBinding) {
 				prepareRequestData(request, model, (DataBinding) pageController);
