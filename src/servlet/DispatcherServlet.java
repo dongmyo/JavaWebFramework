@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import vo.Member;
+
 @SuppressWarnings("serial")
 @WebServlet("*.do")
 public class DispatcherServlet extends HttpServlet {
@@ -29,23 +31,41 @@ public class DispatcherServlet extends HttpServlet {
 			}
 			// 회원 등록
 			else if ("/member/add.do".equals(servletPath)) {
-				// TODO
+				pageControllerPath = "/member/add";
+				  
+				if(request.getParameter("email") != null) {
+					Member member = new Member()
+							.setEmail(request.getParameter("email"))
+							.setPassword(request.getParameter("password"))
+							.setName(request.getParameter("name"));
+					
+					request.setAttribute("member", member);
+				}
 			}
 			// 회원 수정
 			else if ("/member/update.do".equals(servletPath)) {
-				// TODO
+				pageControllerPath = "/member/update";
+				
+				if (request.getParameter("email") != null) {
+					Member member = new Member()
+							.setNo(Integer.parseInt(request.getParameter("no")))
+							.setEmail(request.getParameter("email"))
+							.setName(request.getParameter("name"));
+					
+					request.setAttribute("member", member);
+				}
 			}
 			// 회원 삭제
 			else if ("/member/delete.do".equals(servletPath)) {
-				// TODO
+				pageControllerPath = "/member/delete";
 			}
 			// 로그인
 			else if ("/auth/login.do".equals(servletPath)) {
-				// TODO
+				pageControllerPath = "/auth/login";
 			}
 			// 로그아웃
 			else if ("/auth/logout.do".equals(servletPath)) {
-				// TODO
+				pageControllerPath = "/auth/logout";
 			}
 			 
 			/* 페이지 컨트롤러로 위임 */

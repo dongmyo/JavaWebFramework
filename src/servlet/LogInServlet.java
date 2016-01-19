@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,8 +19,10 @@ public class LogInServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("/auth/LogInForm.jsp");
-		rd.forward(request, response);
+		request.setAttribute("viewUrl", "/auth/LogInForm.jsp");
+
+//		RequestDispatcher rd = request.getRequestDispatcher("/auth/LogInForm.jsp");
+//		rd.forward(request, response);
 	}
 
 	@Override
@@ -35,11 +36,14 @@ public class LogInServlet extends HttpServlet {
 			if(member != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("member", member);
-				response.sendRedirect("../member/list.do");
+				
+				request.setAttribute("viewUrl", "redirect:../member/list.do");
+//				response.sendRedirect("../member/list.do");
 			}
 			else {
-				RequestDispatcher rd = request.getRequestDispatcher("/auth/LogInFail.jsp");
-				rd.forward(request, response);
+				request.setAttribute("viewUrl", "/auth/LogInFail.jsp");
+//				RequestDispatcher rd = request.getRequestDispatcher("/auth/LogInFail.jsp");
+//				rd.forward(request, response);
 			}
 		}
 		catch(Exception e) {

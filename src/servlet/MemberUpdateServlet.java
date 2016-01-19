@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,15 +26,17 @@ public class MemberUpdateServlet extends HttpServlet {
 
 			request.setAttribute("member", member);
 
-			RequestDispatcher rd = request.getRequestDispatcher("/member/MemberUpdateForm.jsp");
-			rd.forward(request, response);
+			request.setAttribute("viewUrl", "/member/MemberUpdateForm.jsp");
+//			RequestDispatcher rd = request.getRequestDispatcher("/member/MemberUpdateForm.jsp");
+//			rd.forward(request, response);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
-			request.setAttribute("error", e);
-
-			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
-			rd.forward(request, response);			
+			throw new ServletException(e);
+//			e.printStackTrace();
+//			request.setAttribute("error", e);
+//
+//			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+//			rd.forward(request, response);			
 		}
 	}
 
@@ -45,21 +46,25 @@ public class MemberUpdateServlet extends HttpServlet {
 			ServletContext sc = this.getServletContext();
 			MemberDao memberDao = (MemberDao) sc.getAttribute("memberDao");  
 
-			memberDao.update(
-					new Member()
-					.setNo(Integer.parseInt(request.getParameter("no")))
-					.setName(request.getParameter("name"))
-					.setEmail(request.getParameter("email"))
-			);
+			Member member = (Member) request.getAttribute("member");
+			memberDao.update(member);
+//			memberDao.update(
+//					new Member()
+//					.setNo(Integer.parseInt(request.getParameter("no")))
+//					.setName(request.getParameter("name"))
+//					.setEmail(request.getParameter("email"))
+//			);
 
-			response.sendRedirect("list.do");			
+			request.setAttribute("viewUrl", "redirect:list.do");
+//			response.sendRedirect("list.do");			
 		}
 		catch(Exception e) {
-			e.printStackTrace();
-			request.setAttribute("error", e);
-
-			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
-			rd.forward(request, response);			
+			throw new ServletException(e);
+//			e.printStackTrace();
+//			request.setAttribute("error", e);
+//
+//			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+//			rd.forward(request, response);			
 		}
 	}
 
