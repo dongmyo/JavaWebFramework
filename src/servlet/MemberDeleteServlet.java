@@ -24,7 +24,7 @@ public class MemberDeleteServlet extends HttpServlet {
 			   
 			memberDao.delete(Integer.parseInt(request.getParameter("no")));
 
-			response.sendRedirect("list");			
+			response.sendRedirect("list.do");			
 		}
 		catch(Exception e) {
 			e.printStackTrace();

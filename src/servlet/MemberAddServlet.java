@@ -36,7 +36,7 @@ public class MemberAddServlet extends HttpServlet {
 					.setName(request.getParameter("name"))
 			);
 
-			response.sendRedirect("list");			
+			response.sendRedirect("list.do");			
 		}
 		catch(Exception e) {
 			e.printStackTrace();

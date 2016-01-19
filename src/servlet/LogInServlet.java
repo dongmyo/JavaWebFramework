@@ -35,7 +35,7 @@ public class LogInServlet extends HttpServlet {
 			if(member != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("member", member);
-				response.sendRedirect("../member/list");
+				response.sendRedirect("../member/list.do");
 			}
 			else {
 				RequestDispatcher rd = request.getRequestDispatcher("/auth/LogInFail.jsp");
