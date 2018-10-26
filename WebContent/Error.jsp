@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<title>시스템 오류!!</title>
+	<title>시스템 오류!</title>
 </head>
 <body>
 	<p>
